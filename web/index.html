@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free Oracle VPS: 4 cores, 24 GB RAM, $0</title>
+<meta name="description" content="Get a free 4-core, 24 GB RAM, 200 GB Oracle Cloud ARM server with quotas and a budget alert that block surprise bills. One script or one agent prompt.">
+<meta property="og:title" content="Free Oracle VPS: 4 cores, 24 GB RAM, $0">
+<meta property="og:description" content="One script sets up a free Oracle Cloud ARM server with cost guards.">
+<meta property="og:url" content="https://free-oracle-vps.yarden-zamir.com">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='2' y='2' width='26' height='26' rx='3' fill='%23FFE14D' stroke='black' stroke-width='3'/><rect x='8' y='9' width='14' height='4' fill='black'/><rect x='8' y='17' width='14' height='4' fill='black'/></svg>">
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=JetBrains+Mono:wght@400;600&display=swap");
+
+:root {
+  color-scheme: light;
+  --canvas: #E4E7FF;   --dots: #00000026;
+  --surface: #FFFFFF;  --raised: #F1F2FF;    --code-bg: #FFFFFF;
+  --ink: #000000;      --muted: #3D3D5C;
+  --border: #000000;   --shadow-ink: #000000;
+  --accent: #6C5CE7;   --accent-fg: #FFFFFF;
+  --select: #FFE14D;   --select-fg: #000000;
+  --error: #FF5277;    --error-fg: #B0002A;   --error-surface: #FFE3E9;
+  --warning: #FFB347;  --warning-fg: #8A4B00; --warning-surface: #FFF6D1;
+  --info: #00B3FF;     --info-fg: #005F87;    --info-surface: #E0F5FF;
+  --green: #7CFF8A;    --yellow: #FFE14D;     --pink: #FF9EB0;
+  --stamp: #8250DF;
+  --link: #6C5CE7;
+  --radius: 0.25rem;   --bw: 2px;
+  --shadow: 4px 4px 0 0 var(--shadow-ink);
+  --sans: "Bricolage Grotesque", system-ui, sans-serif;
+  --mono: "JetBrainsMono Nerd Font Mono", "JetBrains Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --canvas: #15122B;   --dots: #F3F0FF22;
+    --surface: #262147;  --raised: #1D1938;    --code-bg: #1D1938;
+    --ink: #F3F0FF;      --muted: #BDB6E6;
+    --border: #F3F0FF;   --shadow-ink: #B9A8FF;
+    --select: #6C5CE7;   --select-fg: #FFFFFF;
+    --error-fg: #FF8A8A;   --error-surface: #3A1830;
+    --warning-fg: #FFE14D; --warning-surface: #3A3018;
+    --info-fg: #7FD9FF;    --info-surface: #132E45;
+    --stamp: #A371F7;
+    --link: #B9A8FF;
+  }
+}
+
+* { box-sizing: border-box; }
+html { font-size: 18px; scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
+body {
+  margin: 0; font: 1rem/1.5 var(--sans); color: var(--ink);
+  background-color: var(--canvas);
+  background-image: radial-gradient(var(--dots) 1.2px, transparent 1.2px);
+  background-size: 16px 16px;
+}
+h1, h2, h3 { font-weight: 800; letter-spacing: -0.01em; margin: 0; }
+p { margin: 0.5rem 0 0; }
+a { color: var(--link); font-weight: 700; }
+code, pre { font-family: var(--mono); font-size: 0.85em; font-variant-ligatures: none; }
+:not(pre) > code {
+  background: linear-gradient(transparent 35%, var(--select) 35%, var(--select) 88%, transparent 88%);
+  color: var(--select-fg); padding: 0 2px; overflow-wrap: anywhere;
+}
+pre {
+  margin: 0; padding: 10px 12px; overflow-x: auto; background: var(--code-bg);
+  border: var(--bw) solid var(--border); border-radius: var(--radius);
+  box-shadow: 3px 3px 0 0 var(--shadow-ink);
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; box-shadow: 0 0 0 6px #FF527766; }
+
+.card {
+  background: var(--surface); border: var(--bw) solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.2rem 1.4rem;
+}
+.sticker {
+  display: inline-block; padding: 0 6px; line-height: 1.5; white-space: nowrap;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
+  color: #000000; background: var(--pink);
+  border: var(--bw) solid var(--shadow-ink); border-radius: 4px;
+  box-shadow: 2px 2px 0 0 var(--shadow-ink);
+  transform: rotate(var(--tilt, -3deg)); vertical-align: middle;
+}
+.sticker.ok { background: var(--green); }
+.sticker.wait { background: var(--yellow); }
+.sticker.info { background: var(--info); }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; cursor: pointer;
+  font: inherit; font-weight: 700; color: var(--ink); background: var(--surface); text-decoration: none;
+  border: var(--bw) solid var(--border); border-radius: var(--radius);
+  transition: transform 80ms, box-shadow 80ms; white-space: nowrap;
+}
+.btn:not(:disabled):hover { transform: translate(-1px, -1px); box-shadow: var(--shadow); }
+.btn:not(:disabled):active { transform: translate(3px, 3px); box-shadow: none; }
+.btn.primary { background: var(--accent); color: var(--accent-fg); }
+.btn.send { background: linear-gradient(135deg, #6C5CE7 0%, #FF5277 100%); color: #FFFFFF; box-shadow: 3px 3px 0 0 var(--shadow-ink); }
+.seg {
+  display: inline-flex; overflow: hidden; background: var(--surface);
+  border: var(--bw) solid var(--border); border-radius: var(--radius);
+}
+.seg button { font: inherit; font-weight: 800; padding: 5px 16px; cursor: pointer; border: 0; background: transparent; color: var(--ink); }
+.seg button + button { border-left: var(--bw) solid var(--border); }
+.seg button[aria-selected="true"] { background: var(--select); color: var(--select-fg); }
+.seg button:focus-visible { outline-offset: -4px; box-shadow: none; }
+
+/* layout */
+.topbar {
+  position: sticky; top: 0; z-index: 10; background: var(--surface);
+  border-bottom: var(--bw) solid var(--border);
+}
+.topbar .inner { max-width: 940px; margin: 0 auto; padding: 0.55rem 1.1rem; display: flex; align-items: center; gap: 1rem; }
+.brand { font-weight: 800; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; font-size: 1.05rem; display: flex; align-items: center; gap: 8px; }
+.brand .logo { width: 1.4rem; height: 1.4rem; background: var(--select); border: var(--bw) solid var(--border); border-radius: var(--radius); display: grid; place-items: center; font-size: 0.75rem; color: var(--select-fg); }
+.topbar nav { display: flex; gap: 0.9rem; margin-left: auto; font-size: 0.85rem; }
+.topbar nav a { color: var(--muted); text-decoration: none; font-weight: 800; }
+.topbar nav a:hover { color: var(--ink); text-decoration: underline; }
+@media (max-width: 760px) { .topbar nav { display: none; } .topbar .gh { margin-left: auto; } }
+
+main { max-width: 940px; margin: 0 auto; padding: 1.8rem 1.1rem 3rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.6rem; }
+@media (max-width: 560px) { main { padding: 1rem 0.6rem 2rem; } .card { padding: 1rem; } .hero h1 { font-size: 1.7rem; } ol.steps > li { padding-left: 2.7rem; } }
+.label { text-transform: uppercase; font-weight: 800; font-size: 0.7rem; letter-spacing: 0.06em; color: var(--muted); }
+.hero h1 { font-size: 2.2rem; line-height: 1.08; margin: 0.4rem 0 0.2rem; }
+.hero .lead { color: var(--muted); max-width: 44rem; }
+.hero .stickers { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 0.9rem; }
+.hero .stickers .sticker:nth-child(2) { --tilt: 2deg; }
+.hero .stickers .sticker:nth-child(3) { --tilt: -1.5deg; }
+.hero .stickers .sticker:nth-child(4) { --tilt: 3deg; }
+.quick { margin-top: 1.2rem; display: grid; gap: 0.7rem; }
+.quick .row { display: grid; grid-template-columns: 1.6rem minmax(0, 1fr); gap: 0.6rem; align-items: start; }
+.quick .row > span { margin-top: 0.35rem; }
+.quick small { color: var(--muted); display: block; margin-top: 0.25rem; font-size: 0.8rem; }
+
+h2 { font-size: 1.4rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 10px; }
+.num {
+  display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; flex: none;
+  font-size: 0.9rem; font-weight: 800; background: var(--select); color: var(--select-fg);
+  border: var(--bw) solid var(--border); border-radius: var(--radius);
+}
+.head { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
+
+.table-wrap { overflow-x: auto; margin-top: 0.7rem; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: var(--bw) solid var(--border); padding: 6px 10px; text-align: left; vertical-align: top; }
+th { background: var(--raised); font-weight: 800; }
+tr.win td { background: var(--select); color: var(--select-fg); }
+tr.win code { background: none; color: inherit; }
+
+ol.steps { margin: 0.8rem 0 0; padding: 0; list-style: none; counter-reset: s; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.75rem; }
+ol.steps > li {
+  counter-increment: s; position: relative; padding: 0.7rem 0.9rem 0.8rem 3rem;
+  background: var(--raised); border: var(--bw) solid var(--border); border-radius: var(--radius);
+}
+ol.steps > li::before {
+  content: counter(s); position: absolute; left: 0.7rem; top: 0.65rem;
+  width: 1.5rem; height: 1.5rem; display: grid; place-items: center;
+  font-weight: 800; font-size: 0.8rem; background: var(--surface);
+  border: var(--bw) solid var(--border); border-radius: var(--radius);
+}
+ol.steps b { font-weight: 800; }
+ol.steps .code { margin-top: 0.5rem; }
+
+.code { position: relative; }
+.code pre { padding-right: 5.2rem; }
+.code .copy {
+  position: absolute; top: 6px; right: 6px; padding: 1px 8px; font-size: 0.75rem;
+}
+.note { margin-top: 0.9rem; padding: 0.6rem 0.9rem; border: var(--bw) solid var(--border); border-radius: var(--radius); background: var(--warning-surface); }
+.note.bad { background: var(--error-surface); }
+.note.info { background: var(--info-surface); }
+.note strong { font-weight: 800; }
+
+[role="tabpanel"] { margin-top: 1rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.8rem; }
+[role="tabpanel"][hidden] { display: none; }
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.status { font-weight: 800; color: var(--muted); font-size: 0.85rem; }
+details.full > summary { cursor: pointer; font-weight: 800; }
+details.full > summary + * { margin-top: 0.6rem; }
+#script-text, #prompt-text { max-height: 26rem; white-space: pre-wrap; font-size: 0.78em; }
+
+ul.tight { margin: 0.3rem 0 0; padding-left: 1.2rem; }
+ul.tight li { margin: 0.15rem 0; }
+.checks { list-style: none; margin: 0.6rem 0 0; padding: 0; display: grid; gap: 0.45rem; }
+.checks li { display: grid; grid-template-columns: 1.9rem minmax(0, 1fr); gap: 0.5rem; align-items: start; }
+.stamp {
+  display: inline-grid; place-items: center; width: 1.5rem; height: 1.5rem; color: var(--stamp);
+  border: 2px solid var(--stamp); border-radius: var(--radius); font-weight: 900; transform: rotate(-6deg);
+}
+.checks li:nth-child(2n) .stamp { transform: rotate(4deg); }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 0.8rem; margin-top: 0.8rem; }
+.tile { padding: 0.7rem 0.9rem; background: var(--raised); border: var(--bw) solid var(--border); border-radius: var(--radius); }
+.tile h3 { font-size: 1rem; margin: 0.35rem 0 0.15rem; }
+.tile p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+.tile:nth-child(2n) .sticker { --tilt: 2deg; }
+.tile:nth-child(3n) .sticker { --tilt: -1.5deg; }
+
+.faq details { border: var(--bw) solid var(--border); border-radius: var(--radius); background: var(--raised); padding: 0.55rem 0.9rem; }
+.faq details + details { margin-top: 0.6rem; }
+.faq summary { cursor: pointer; font-weight: 800; }
+.faq details[open] summary { margin-bottom: 0.4rem; }
+
+footer { max-width: 940px; margin: 0 auto; padding: 0 1.1rem 2.5rem; display: flex; flex-wrap: wrap; gap: 0.6rem 1.2rem; justify-content: space-between; color: var(--muted); font-size: 0.85rem; }
+footer .links { display: flex; gap: 1rem; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="inner">
+    <a class="brand" href="#top"><span class="logo">$0</span>free-oracle-vps</a>
+    <nav aria-label="Sections">
+      <a href="#why">Why</a>
+      <a href="#account">Account</a>
+      <a href="#build">Build</a>
+      <a href="#after">After</a>
+      <a href="#catches">Catches</a>
+      <a href="#help">Help</a>
+    </nav>
+    <a class="btn gh" href="https://github.com/Yarden-zamir/free-oracle-vps">
+      <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="card hero">
+  <div class="label">Guide · Oracle Cloud Always Free</div>
+  <h1>A free 4-core, 24 GB RAM server, with no surprise bills</h1>
+  <p class="lead">Do the account steps yourself. Then one script, or one prompt for your coding agent, builds the server and the cost guards.</p>
+  <div class="stickers">
+    <span class="sticker ok">$0 / month</span>
+    <span class="sticker wait">4 ARM cores</span>
+    <span class="sticker">24 GB RAM</span>
+    <span class="sticker info">200 GB disk</span>
+  </div>
+  <div class="quick">
+    <div class="label" style="margin-top:0.4rem">Quick start, after <a href="#account">the account steps</a></div>
+    <div class="row"><span class="num">1</span><div class="code"><pre>curl -LsSf https://astral.sh/uv/install.sh | sh</pre></div></div>
+    <div class="row"><span class="num">2</span><div class="code"><pre>uvx --from oci-cli oci setup bootstrap</pre></div></div>
+    <div class="row"><span class="num">3</span><div>
+      <div class="code"><pre>uv run https://free-oracle-vps.yarden-zamir.com/oracle-free-server.py --plan</pre></div>
+      <small>Shows what the script would do and changes nothing. Run it again without <code>--plan</code> to build the server.</small>
+    </div></div>
+  </div>
+</section>
+
+<section class="card" id="why">
+  <h2><span class="num">0</span>Why Oracle</h2>
+  <p>Prices per year, for about 4 cores, 16 GB or more of RAM and about 300 GB of disk.</p>
+  <div class="table-wrap"><table>
+    <tr><th>Option</th><th>Per year</th><th>Notes</th></tr>
+    <tr class="win"><td><b>Oracle Always Free (ARM)</b></td><td><b>$0</b></td><td>4 cores, 24 GB, 200 GB. Needs software that runs on ARM.</td></tr>
+    <tr><td>SSD Nodes</td><td>about $180</td><td>Cheap shared server.</td></tr>
+    <tr><td>AWS Lightsail, 4 cores / 16 GB / 320 GB</td><td>about $1,008</td><td>Simplest AWS option. No Israel region.</td></tr>
+    <tr><td>AWS EC2 in Israel, 1 year paid ahead, plus disk</td><td>about $1,220</td><td><code>t4g.xlarge</code> plus 300 GB of disk and a public IP.</td></tr>
+  </table></div>
+  <p>One Oracle ARM core is a full physical core. On most other clouds, "4 vCPU" means 2 physical cores.</p>
+</section>
+
+<section class="card" id="account">
+  <h2><span class="num">1</span>Your part: the account</h2>
+  <p>A script cannot do these steps. They need your card, your phone and a browser login.</p>
+  <ol class="steps">
+    <li><b>Sign up</b> at <a href="https://signup.cloud.oracle.com">signup.cloud.oracle.com</a>. Use a password manager for the password. Click "Start my free trial". The trial gives $300 of credit for 30 days. The Always Free resources stay free after that.</li>
+    <li><b>Pick the home region with care.</b>
+      <p>🔴 You cannot change it later, and the free ARM server exists only in the home region.</p>
+      <ul class="tight">
+        <li>Israel Central (Jerusalem): lowest latency from Israel. It has one data center only.</li>
+        <li>Sweden Central (Stockholm) or Spain Central (Madrid): less used, so free capacity is easier to get.</li>
+        <li>Germany Central (Frankfurt) or Netherlands Northwest (Amsterdam): good, but popular.</li>
+      </ul>
+    </li>
+    <li><b>Add your card</b> and finish the signup. Wait for the email that says your account is ready.</li>
+    <li><b>Turn on two-factor login.</b> In the console, open your profile, then <b>Security</b>, then <b>Enable multi-factor authentication</b>.</li>
+    <li><b>Install uv</b>, the tool that runs the script. It also gets Python and the Oracle tools for you. On a Mac or Linux:
+      <div class="code"><pre>curl -LsSf https://astral.sh/uv/install.sh | sh</pre></div>
+      <p>On Windows, in PowerShell:</p>
+      <div class="code"><pre>powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"</pre></div>
+    </li>
+    <li><b>Log in from a new terminal:</b>
+      <div class="code"><pre>uvx --from oci-cli oci setup bootstrap</pre></div>
+      <p>A browser opens. Log in there. In the terminal, enter your home region by name (for example <code>il-jerusalem-1</code>) or by its number in the list. Accept the defaults for the other prompts.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="card" id="build">
+  <div class="head">
+    <h2 style="margin:0"><span class="num">2</span>Build the server</h2>
+    <div class="seg" role="tablist" aria-label="How to build">
+      <button role="tab" id="tab-script" aria-controls="panel-script" aria-selected="true">Script</button>
+      <button role="tab" id="tab-agent" aria-controls="panel-agent" aria-selected="false" tabindex="-1">Agent prompt</button>
+    </div>
+  </div>
+
+  <div role="tabpanel" id="panel-script" aria-labelledby="tab-script">
+    <p style="margin:0">Run the script straight from this site. First check what it would do, without any change:</p>
+    <div class="code"><pre>uv run https://free-oracle-vps.yarden-zamir.com/oracle-free-server.py --plan</pre></div>
+    <p style="margin:0">Then build the server:</p>
+    <div class="code"><pre>uv run https://free-oracle-vps.yarden-zamir.com/oracle-free-server.py</pre></div>
+    <p style="margin:0">To keep a copy and read it first, download it, then run the local file:</p>
+    <div class="code"><pre>curl -LsSfO https://free-oracle-vps.yarden-zamir.com/oracle-free-server.py
+uv run oracle-free-server.py --plan</pre></div>
+    <div>
+      <p style="margin:0">The script asks for an email for the cost alert. Then it does the rest, in this order:</p>
+      <ul class="tight">
+        <li>Quotas that block every paid resource, and a 1 USD budget that emails you about any charge.</li>
+        <li>A network, a public subnet and Oracle's firewall rules.</li>
+        <li>The server. If Oracle has no free capacity, the script tries every data center again each minute. Press Ctrl+C to stop.</li>
+        <li>A reserved public IP address that never changes.</li>
+        <li>A <code>Host oracle-vps</code> entry in <code>~/.ssh/config</code>, and the same ports opened in the server's own firewall.</li>
+      </ul>
+      <p>Run it again at any time. It reuses what already exists.</p>
+    </div>
+    <h3>Options</h3>
+    <div class="table-wrap" style="margin-top:0"><table>
+      <tr><th>Option</th><th>Default</th><th>Effect</th></tr>
+      <tr><td><code>name</code></td><td><code>oracle-vps</code></td><td>Server name and SSH host name, for example <code>uv run oracle-free-server.py my-box</code>.</td></tr>
+      <tr><td><code>--email</code></td><td>asked</td><td>Email for the cost alert.</td></tr>
+      <tr><td><code>--ssh-key</code></td><td><code>~/.ssh/id_ed25519.pub</code></td><td>SSH public key. The script creates the key if it does not exist.</td></tr>
+      <tr><td><code>--tcp</code></td><td><code>80,443</code></td><td>TCP ports to open besides 22. Use <code>none</code> for SSH only.</td></tr>
+      <tr><td><code>--udp</code></td><td>none</td><td>UDP ports to open, for example <code>443</code> for HTTP/3.</td></tr>
+      <tr><td><code>--ocpus</code> <code>--memory</code> <code>--disk</code></td><td>4, 24, 200</td><td>Server size. The free limit is the maximum, so the script refuses more.</td></tr>
+      <tr><td><code>--ubuntu</code></td><td><code>24.04</code></td><td><code>22.04</code>, <code>24.04</code> or <code>26.04</code>.</td></tr>
+      <tr><td><code>--budget</code></td><td>1</td><td>Monthly USD amount for the budget alert.</td></tr>
+      <tr><td><code>--retry</code></td><td>60</td><td>Seconds between tries while Oracle has no capacity.</td></tr>
+      <tr><td><code>--profile</code></td><td><code>DEFAULT</code></td><td>Profile in <code>~/.oci/config</code>.</td></tr>
+      <tr><td><code>--no-quotas</code> <code>--no-budget</code></td><td></td><td>Skip the cost guards. Not recommended.</td></tr>
+      <tr><td><code>--no-reserved-ip</code></td><td></td><td>Keep the temporary public IP.</td></tr>
+      <tr><td><code>--no-server-firewall</code></td><td></td><td>Open the ports only in Oracle's firewall, not inside the server.</td></tr>
+      <tr><td><code>--plan</code></td><td></td><td>Show what the script would do. Change nothing.</td></tr>
+    </table></div>
+    <div class="actions">
+      <a class="btn send" href="oracle-free-server.py" download>⬇ Download script</a>
+      <a class="btn" href="https://github.com/Yarden-zamir/free-oracle-vps/blob/main/oracle-free-server.py">View on GitHub</a>
+    </div>
+    <details class="full">
+      <summary>Show the full script</summary>
+      <div class="code"><pre id="script-text">@@SCRIPT@@</pre></div>
+    </details>
+  </div>
+
+  <div role="tabpanel" id="panel-agent" aria-labelledby="tab-agent" hidden>
+    <p style="margin:0">Use this if you prefer a coding agent, for example Claude Code or Codex. Paste the prompt into the agent in a terminal on your computer. The agent runs the script with a plan first, or does every step by hand if you ask.</p>
+    <div class="actions">
+      <button class="btn send" type="button" data-copy-target="prompt-text">📋 Copy prompt for your agent</button>
+      <a class="btn" href="agent-prompt.md">Open as text</a>
+      <span class="status" aria-live="polite"></span>
+    </div>
+    <pre id="prompt-text">@@PROMPT@@</pre>
+  </div>
+</section>
+
+<section class="card" id="after">
+  <h2><span class="num">3</span>After the build</h2>
+  <p>When the script ends, you have:</p>
+  <ul class="checks">
+    <li><span class="stamp">✓</span><span>A running server. Connect with <code>ssh oracle-vps</code>.</span></li>
+    <li><span class="stamp">✓</span><span>A reserved public IP address. Point your domain at it.</span></li>
+    <li><span class="stamp">✓</span><span>The <code>free-tier-only</code> quotas. They block every paid resource, also with a stolen login.</span></li>
+    <li><span class="stamp">✓</span><span>The <code>free-tier-guard</code> budget. It emails you about any charge.</span></li>
+  </ul>
+  <h3 style="margin-top:1.1rem">Last step: upgrade to Pay As You Go</h3>
+  <p>In the Oracle console, open the menu (☰), then <b>Billing &amp; Cost Management</b>, then <b>Upgrade and Manage Payment</b>. Pick <b>Pay As You Go</b>.</p>
+  <div class="note info"><strong>Why upgrade?</strong> On a free account, Oracle can stop a server that stays below 20% use for 7 days. After 30 days, a free account also loses everything that is not Always Free. Pay As You Go removes both risks. The quotas block every paid resource, so the upgrade alone does not cost money. Expect a temporary card hold of about $100. Oracle sends the email "your subscription(s) has been updated" when the upgrade is done.</div>
+</section>
+
+<section class="card" id="catches">
+  <h2><span class="num">4</span>The catches</h2>
+  <div class="grid">
+    <div class="tile"><span class="sticker">idle reclaim</span><h3>Idle servers can go</h3><p>On a free account, Oracle can stop a server that stays below 20% CPU, network and memory use for 7 days. Pay As You Go removes this.</p></div>
+    <div class="tile"><span class="sticker wait">account risk</span><h3>Accounts can close</h3><p>People report sudden closures of free accounts after fraud checks. Keep backups of important data outside Oracle.</p></div>
+    <div class="tile"><span class="sticker info">ARM</span><h3>ARM only</h3><p>Most Linux software and Docker images run on ARM. Some old x86-only programs do not.</p></div>
+    <div class="tile"><span class="sticker">no promise</span><h3>No uptime promise</h3><p>Free resources have no guarantee and no support. Oracle can change the free limits.</p></div>
+    <div class="tile"><span class="sticker wait">traffic</span><h3>Traffic over 10 TB</h3><p>Outbound traffic is free up to 10 TB a month. More costs about $9 per TB. Quotas cannot block this. The budget alert tells you.</p></div>
+    <div class="tile"><span class="sticker ok">disk full</span><h3>No free disk left</h3><p>The server uses all 200 GB of free disk. The quotas block more disk. Oracle includes 5 free disk backups.</p></div>
+  </div>
+  <div class="note bad"><strong>The real money risk is a stolen login.</strong> Attackers use stolen cloud logins to mine crypto on large servers. Two-factor login protects the console. The quotas block paid servers even with a stolen key. The key in <code>~/.oci/</code> lets any program on your computer manage your account. Delete the folder when you no longer need it.</div>
+</section>
+
+<section class="card faq" id="help">
+  <h2><span class="num">5</span>Help</h2>
+  <details>
+    <summary>The script says "no free capacity" for a long time</summary>
+    <p>Free ARM capacity is often sold out in popular regions. Let the script run; it tries again each minute. Some people wait hours. The Pay As You Go upgrade usually makes capacity easier to get.</p>
+  </details>
+  <details>
+    <summary>"Oracle still rejects the login"</summary>
+    <p>A new login key takes a few minutes to work, and the script waits up to 2 minutes. If it still fails, run the login again:</p>
+    <div class="code" style="margin-top:0.5rem"><pre>uvx --from oci-cli oci setup bootstrap</pre></div>
+  </details>
+  <details>
+    <summary>My website does not load on port 80 or 443</summary>
+    <p>Two firewalls must allow the port: Oracle's firewall and the server's own iptables rules. The script opens both. If you used <code>--no-server-firewall</code>, add the rules in <code>/etc/iptables/rules.v4</code> above the final <code>REJECT</code> line. Oracle's Ubuntu images do not use <code>ufw</code>.</p>
+  </details>
+  <details>
+    <summary>How do I remove everything?</summary>
+    <p>In the Oracle console, terminate the server (Compute, Instances) and choose to delete its disk. Then delete the reserved IP, the network, the quota policy and the budget. Free resources cost nothing while they exist, so you can also keep them.</p>
+  </details>
+  <details>
+    <summary>Does this work on Windows?</summary>
+    <p>Yes. Install uv with the PowerShell command in step 5, then run the same commands. The server firewall step needs the OpenSSH client, which Windows 10 and 11 include. Nobody tested it on Windows yet; <a href="https://github.com/Yarden-zamir/free-oracle-vps/issues">open an issue</a> if it fails.</p>
+  </details>
+</section>
+
+</main>
+
+<footer>
+  <span>Made by <a href="https://yarden-zamir.com">Yarden Zamir</a> from a real setup in October 2026. Prices and free limits can change: check <a href="https://docs.oracle.com/en-us/iaas/Content/FreeTier/resourceref.htm">Oracle's Always Free page</a>.</span>
+  <span class="links">
+    <a href="https://github.com/Yarden-zamir/free-oracle-vps">Source</a>
+    <a href="https://github.com/Yarden-zamir/free-oracle-vps/issues">Issues</a>
+    <a href="https://github.com/Yarden-zamir/free-oracle-vps/blob/main/LICENSE">MIT license</a>
+  </span>
+</footer>
+
+<script>
+async function copyText(text, status) {
+  try {
+    await navigator.clipboard.writeText(text);
+    status.textContent = "Copied ✓";
+  } catch {
+    status.textContent = "Copy failed. Select the text.";
+  }
+  setTimeout(() => { status.textContent = status.dataset.label ?? ""; }, 2000);
+}
+
+// One copy button on every command box.
+for (const box of document.querySelectorAll(".code")) {
+  const pre = box.querySelector("pre");
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "btn copy";
+  button.textContent = button.dataset.label = "Copy";
+  button.addEventListener("click", () => copyText(pre.textContent, button));
+  box.append(button);
+}
+
+for (const button of document.querySelectorAll("[data-copy-target]")) {
+  const target = document.getElementById(button.dataset.copyTarget);
+  const status = button.parentElement.querySelector(".status");
+  button.addEventListener("click", () => copyText(target.textContent, status));
+}
+
+// Tabs, with arrow keys between them.
+const tabs = [...document.querySelectorAll('[role="tab"]')];
+function select(tab) {
+  for (const t of tabs) {
+    const on = t === tab;
+    t.setAttribute("aria-selected", on);
+    t.tabIndex = on ? 0 : -1;
+    document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+  }
+  tab.focus();
+  history.replaceState(null, "", tab.id === "tab-agent" ? "#agent" : "#build");
+}
+for (const tab of tabs) {
+  tab.addEventListener("click", () => select(tab));
+  tab.addEventListener("keydown", (e) => {
+    const step = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+    if (step) select(tabs[(tabs.indexOf(tab) + step + tabs.length) % tabs.length]);
+  });
+}
+if (location.hash === "#agent") {
+  select(document.getElementById("tab-agent"));
+  document.getElementById("build").scrollIntoView();
+}
+</script>
+</body>
+</html>

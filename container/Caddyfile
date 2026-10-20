@@ -1,0 +1,35 @@
+# Caddy inside the container. The host Caddy (Caddyfile.j2) terminates TLS and proxies
+# the public hostname to this Unix socket, so this file serves plain HTTP on the socket.
+{
+	auto_https off
+	admin off
+}
+
+http:// {
+	# Caddy binds the KitSHn socket directly and removes a stale socket file left by a
+	# previous container, so no socat sidecar is needed. 0666 lets the host Caddy connect.
+	bind unix/{$KITSHN_DEFAULT_SOCKET}|0666
+	root * /srv
+
+	# encode only compresses its default MIME types. A custom Content-Type set with `header`
+	# is not in that list, and `header` runs before encode sees the type, so list every type
+	# to compress here explicitly.
+	encode zstd gzip {
+		match {
+			header Content-Type text/*
+			header Content-Type application/json*
+			header Content-Type application/javascript*
+			header Content-Type application/xml*
+			header Content-Type application/manifest+json*
+			header Content-Type image/svg+xml*
+		}
+	}
+
+	# Show the script and the prompt as text in the browser. `uv run <url>` and curl read them as files.
+	@text path *.py *.md
+	header @text Content-Type "text/plain; charset=utf-8"
+	# Short cache, so a new version reaches users fast.
+	header Cache-Control "public, max-age=300"
+
+	file_server
+}

@@ -1,0 +1,19 @@
+services:
+  site:
+    build: .
+    pull_policy: build
+    environment:
+      KITSHN_RECIPE: ${KITSHN_RECIPE}
+      KITSHN_ENVIRONMENT: ${KITSHN_ENVIRONMENT}
+      KITSHN_DEPLOYMENT: ${KITSHN_DEPLOYMENT}
+      KITSHN_SOCKET_DIR: ${KITSHN_SOCKET_DIR}
+      KITSHN_DEFAULT_SOCKET: ${KITSHN_DEFAULT_SOCKET}
+    volumes:
+      - ${KITSHN_SOCKET_DIR}:${KITSHN_SOCKET_DIR}
+    healthcheck:
+      test: ["CMD", "test", "-S", "${KITSHN_DEFAULT_SOCKET}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped

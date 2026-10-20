@@ -1,0 +1,4 @@
+/Caddyfile
+/site/
+.DS_Store
+.ruff_cache/
