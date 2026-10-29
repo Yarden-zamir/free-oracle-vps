@@ -26,7 +26,7 @@ If you prefer a coding agent, use [agent-prompt.md](agent-prompt.md).
 - `oracle-free-server.py`: the setup script, a uv script with its dependencies in the header.
 - `agent-prompt.md`: the same setup as a prompt for a coding agent.
 - `web/index.html`: the guide page. `build.py` embeds the script and the prompt into it and writes `site/`.
-- `compose.yml`, `Dockerfile`, `container/Caddyfile`, `Caddyfile.j2`, `.kitshn.yaml`: the [KitSHn](https://github.com/Yarden-zamir/kitshn) deployment. A push to `main` deploys the site.
+- `compose.yml`, `Dockerfile`, `container/Caddyfile`, `kitshn.config.ts`: the [kitshn 2](https://kit.yarden-zamir.com) deployment. A push to `main` deploys the site. See `kitshn.md`.
 
 ## Local preview
 

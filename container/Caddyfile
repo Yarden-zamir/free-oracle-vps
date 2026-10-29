@@ -1,5 +1,5 @@
-# Caddy inside the container. The host Caddy (Caddyfile.j2) terminates TLS and proxies
-# the public hostname to this Unix socket, so this file serves plain HTTP on the socket.
+# Caddy inside the container. kitshn's Cloudflare tunnel terminates TLS and sends the public
+# hostname to this Unix socket, so this file serves plain HTTP on the socket.
 {
 	auto_https off
 	admin off

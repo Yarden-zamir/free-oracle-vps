@@ -1,4 +1,0 @@
-# host() keeps free-oracle-vps.yarden-zamir.com for prod and gives pr-<number>.free-oracle-vps.yarden-zamir.com to previews.
-{{ host("free-oracle-vps.yarden-zamir.com") }} {
-    reverse_proxy unix//{{ paths.default_socket }}
-}
